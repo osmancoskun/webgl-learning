@@ -17,14 +17,14 @@ export class EffectManager {
   private isSwitching: boolean = false;
 
   private readonly context: EffectContext;
-  private readonly pane: Pane;
+  public pane: Pane | null = null;
   private effectFolder: FolderApi | null = null;
 
   private startTime: number = 0;
   private lastTime: number = 0;
   private frameCount: number = 0;
 
-  constructor(glContext: GLContext, pane: Pane) {
+  constructor(glContext: GLContext, pane: Pane | null = null) {
     this.glContext = glContext;
     this.pane = pane;
 
@@ -117,11 +117,13 @@ export class EffectManager {
     target.resize(this.context.width, this.context.height, this.context.dpr);
 
     // Setup GUI parameters for target effect
-    this.effectFolder = this.pane.addFolder({
-      title: `${target.title} Controls`,
-      expanded: true
-    });
-    target.setupGui(this.effectFolder);
+    if (this.pane) {
+      this.effectFolder = this.pane.addFolder({
+        title: `${target.title} Controls`,
+        expanded: true
+      });
+      target.setupGui(this.effectFolder);
+    }
 
     this.activeEffect = target;
     this.isSwitching = false;
