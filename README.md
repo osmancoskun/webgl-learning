@@ -1,39 +1,75 @@
 # WebGL2 Learning Lab
 
-A zero-dependency, hardware-accelerated WebGL2 learning platform and high-performance shader laboratory written in strict TypeScript and GLSL 300 es.
+A clean, zero-dependency WebGL2 playground and learning project built with Vite, TypeScript, and raw GLSL 300 es. No Three.js, no external 3D libraries—just direct GPU rendering focused on high performance and smooth visuals.
 
 ---
 
-## Architecture & Core Tenets
-
-1. **Zero External 3D Libraries:** No Three.js, Babylon.js, or OGL. Everything communicates directly with raw WebGL2 API (`gl.*`).
-2. **Strict Zero-GC in Hot Loop:** No heap allocations (`new Float32Array`, temporary objects, closures) inside the render loop to prevent Garbage Collector micro-stutters.
-3. **VAO Standard:** All geometry attributes, buffers, strides, and instanced divisors are captured in pre-configured Vertex Array Objects. Render calls use a single `gl.bindVertexArray(vao)`.
-4. **Shader Diagnostics:** Custom compilation wrapper intercepts GLSL compilation failures and outputs formatted contextual line snippets directly to the developer console.
-5. **Interactive Cartesian Plane ($+X, -X, +Y, -Y$):** An interactive 2D graph allowing users to shape mathematical functions ($f(x)$) via Tweakpane which are instantly uploaded into a 1D Float32 texture LUT (`u_curveLut`) to modulate shader behavior in real time.
-
----
-
-## Effects Gallery
-
-| Effect | Technique | Performance | Documentation |
-| :--- | :--- | :--- | :--- |
-| **Domain-Warp Fluid Gradient** | Single-pass Fullscreen Quad + 4-octave fBm + Domain Warping | 1 Draw Call, 120 FPS | [Read docs](src/effects/fluid-gradient/README.md) |
-| **GPU Instanced 100k Particles** | `gl.drawArrays(POINTS)` + 3D Curl Noise + Radial Cursor Repulsion | 1 Draw Call, 120 FPS | [Read docs](src/effects/gpu-particles/README.md) |
-| **Liquid Image & Distortion** | Mouse Velocity Momentum + Refractive Sine Ripples + RGB Aberration | 1 Draw Call, 120 FPS | [Read docs](src/effects/liquid-image/README.md) |
-| **Raymarched SDF Morphing** | Sphere Tracing + Continuous Polynomial $smin$ + Blinn-Phong Specular | 1 Draw Call, 120 FPS | [Read docs](src/effects/raymarching-sdf/README.md) |
-
----
-
-## Development & Build
+## Quick Start
 
 ```bash
-# Install dependencies
+# 1. Install dependencies
 npm install
 
-# Start Vite development server
+# 2. Start local dev server
 npm run dev
 
-# Run TypeScript typecheck and production build
+# 3. Build for production
 npm run build
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+---
+
+## What's Inside
+
+- **No 3D Frameworks:** Built directly with the native WebGL2 API (`gl.*`).
+- **Zero-GC Render Loop:** Zero object allocations during rendering to avoid garbage collection frame drops.
+- **GLSL 300 es & VAO:** Modern shader standards and pre-configured Vertex Array Objects for clean state management.
+- **Interactive Cartesian Graph:** A live 2D $+X, -X, +Y, -Y$ graph allowing you to tweak math functions ($f(x)$) via GUI and send them directly to shaders through a 1D Float32 texture LUT (`u_curveLut`).
+- **Live Performance Stats:** Real-time FPS, frame time (ms), and resolution display.
+
+---
+
+## Effects
+
+1. **Domain-Warp Fluid Gradient** (`src/effects/fluid-gradient/`)
+   - Smooth, organic background effect using Fractional Brownian Motion (fBm) and domain warping.
+   - [Read documentation](src/effects/fluid-gradient/README.md)
+
+2. **GPU Instanced 100k Particles** (`src/effects/gpu-particles/`)
+   - 100,000 points animated entirely on the GPU with 3D curl noise and cursor physics.
+   - [Read documentation](src/effects/gpu-particles/README.md)
+
+3. **Liquid Image & Distortion** (`src/effects/liquid-image/`)
+   - Interactive ripple and chromatic aberration displacement reacting to mouse speed.
+   - [Read documentation](src/effects/liquid-image/README.md)
+
+4. **Raymarched SDF Morphing** (`src/effects/raymarching-sdf/`)
+   - Mathematical 3D shapes merging smoothly via Sphere Tracing and Blinn-Phong lighting without 3D models.
+   - [Read documentation](src/effects/raymarching-sdf/README.md)
+
+---
+
+## Controls & Interaction
+
+- **Effect Switcher:** Select any effect from the top dropdown in the controls panel.
+- **Mouse / Touch:** Move your cursor across the screen to interact with the active effect (waves, particle repulsion, rotation).
+- **Cartesian Math Controls:**
+  - Choose a shaping function (Linear, Smoothstep, Sine, Damped Wave, Gaussian, or Custom).
+  - Adjust Frequency, Amplitude, and Damping to see the curve and shader change in real time.
+- **Effect Parameters:** Fine-tune speed, colors, particles, or lighting under each effect's folder.
+
+---
+
+## Project Structure
+
+```text
+src/
+├── core/         # WebGL2 context, shader compiler, VAO quad, FBO, textures
+├── math/         # Cartesian 2D canvas graph, math evaluator, 1D texture LUT
+├── framework/    # BaseEffect lifecycle and EffectManager
+├── effects/      # Individual effects with GLSL shaders and docs
+├── ui/           # Tweakpane dashboard and FPS telemetry
+└── main.ts       # Application entry point
 ```
