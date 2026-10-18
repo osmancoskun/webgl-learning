@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebGL2 Learning - High Performance Shader Lab</title>
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html, body {
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        background-color: #0d0f12;
+        color: #f3f4f6;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        user-select: none;
+      }
+      #canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+        z-index: 1;
+      }
+      #stats-container {
+        position: absolute;
+        bottom: 16px;
+        left: 16px;
+        z-index: 10;
+        background: rgba(13, 15, 18, 0.75);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(8px);
+        padding: 8px 14px;
+        border-radius: 8px;
+        font-family: monospace;
+        font-size: 12px;
+        line-height: 1.5;
+        pointer-events: none;
+      }
+      .stat-highlight {
+        color: #38bdf8;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <canvas id="canvas"></canvas>
+    <div id="stats-container">
+      <div>FPS: <span id="stat-fps" class="stat-highlight">--</span></div>
+      <div>Frame Time: <span id="stat-time" class="stat-highlight">-- ms</span></div>
+      <div>Resolution: <span id="stat-res" class="stat-highlight">--</span></div>
+    </div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>
